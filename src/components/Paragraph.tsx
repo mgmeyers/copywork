@@ -10,14 +10,17 @@ import { offset } from 'caret-pos'
 import scroll from 'scroll'
 import { Textarea } from './Textarea'
 import { Caret } from './Caret'
+import { Theme } from './ThemeProvider'
 
-export const ParagraphWrapper = styled.div({
+export const ParagraphWrapper = styled.div<{ theme: Theme }>(({ theme }) => ({
     position: 'relative',
     maxWidth: '50ch',
     display: 'grid',
     gridTemplate: '0fr / 1fr',
     placeItems: 'center',
-    fontSize: 22,
+    fontSize: theme.font.editor.size,
+    fontWeight: theme.font.editor.weight,
+    lineHeight: theme.font.editor.lineHeight,
     margin: '0 auto 1em',
 
     '*': {
@@ -28,7 +31,7 @@ export const ParagraphWrapper = styled.div({
         gridColumn: '1 / 1',
         gridRow: '1 / 1',
     },
-})
+}))
 
 export function Paragraph({
     string,
@@ -116,6 +119,24 @@ export function Paragraph({
                 onBlur={onBlur}
                 autoComplete="off"
                 onChange={onChange}
+                onKeyDown={e => {
+                    if (e.metaKey && e.key === 'ArrowRight') {
+                        let addition = input
+                        let i = input.length
+
+                        while (i < string.length - 1) {
+                            addition += string[i]
+
+                            if (string[i] === ' ') {
+                                break
+                            }
+                            
+                            i++
+                        }
+
+                        setInput(addition)
+                    }
+                }}
             />
         </ParagraphWrapper>
     )

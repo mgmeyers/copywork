@@ -1,17 +1,29 @@
 import React from 'react'
 import styled from '@emotion/styled'
+import { Button } from 'evergreen-ui'
 
-import {
-    useLatest,
-    useLocalStorage,
-    useMount,
-} from 'react-use'
+import { useLatest, useLocalStorage, useMount } from 'react-use'
 import { TitleBar } from './TitleBar'
 import { Paragraph } from './Paragraph'
 import { BookData } from '../types'
+import { Theme } from './ThemeProvider'
 
-export const PagePadding = styled.div({
-    padding: '33vh 0',
+export const AppWrapper = styled.div<{ theme: Theme }>(({ theme }) => ({
+    fontFamily: theme.font.ui.family,
+    fontSize: theme.font.ui.size,
+    fontWeight: theme.font.ui.weight,
+    lineHeight: theme.font.ui.lineHeight,
+    padding: '7em 0',
+    minHeight: 'calc(100% - 14em)',
+    width: '100%'
+}))
+
+export const ButtonWrapper = styled.div({
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
 })
 
 function App() {
@@ -30,6 +42,10 @@ function App() {
 
     const [paragraphs, setParagraphs] = React.useState<string[] | null>(null)
     const [bookData, setBookData] = React.useState<BookData | null>(null)
+    const [
+        hasTriggeredInitialLoad,
+        setHasTriggeredInitialLoad,
+    ] = React.useState<boolean>(false)
 
     React.useEffect(() => {
         if (bookData) {
@@ -46,11 +62,6 @@ function App() {
         setChapterIndex(
             Math.min(chapterIndex + 1, (bookData?.chapters?.length || 1) - 1)
         )
-        setParagraphIndex(0)
-    })
-
-    const decrementChapter = useLatest(() => {
-        setChapterIndex(Math.max(0, chapterIndex - 1))
         setParagraphIndex(0)
     })
 
@@ -83,33 +94,54 @@ function App() {
     }, [paragraphs, skipEmptyChapter])
 
     const openBook = React.useCallback(
-        ({ openLast = false }: { openLast?: boolean }) => {
-            window.apiBridge.open({ openLast }).then((res) => {
-                if (res) {
-                    setBookData(res)
+        (opts?: { bookPath?: string }) => {
+            window.apiBridge
+                .open(opts)
+                .then((res) => {
+                    if (res) {
+                        setBookData(res)
 
-                    if (bookPath !== res.filePath) {
-                        setChapterIndex(0)
-                        setParagraphIndex(0)
+                        if (bookPath !== res.filePath) {
+                            setChapterIndex(0)
+                            setParagraphIndex(0)
+                        }
+
+                        setBookPath(res.filePath)
                     }
 
-                    setBookPath(res.filePath)
-                }
-            })
+                    setHasTriggeredInitialLoad(true)
+                })
+                .catch((e) => {
+                    console.error(e)
+                    setHasTriggeredInitialLoad(true)
+                })
         },
         [setParagraphIndex, setChapterIndex, setBookPath, bookPath]
     )
 
     useMount(() => {
-        openBook({ openLast: true })
+        if (bookPath) {
+            openBook({ bookPath })
+        } else {
+            setHasTriggeredInitialLoad(true)
+        }
     })
 
+    if (hasTriggeredInitialLoad && !bookData) {
+        return (
+            <AppWrapper>
+                <ButtonWrapper>
+                    <Button onClick={() => openBook()} height={40}>Open EPub File</Button>
+                </ButtonWrapper>
+            </AppWrapper>
+        )
+    }
+
     return (
-        <PagePadding>
+        <AppWrapper>
             <TitleBar
                 chapterIndex={chapterIndex}
-                incrementChapter={incrementChapter}
-                decrementChapter={decrementChapter}
+                setChapterIndex={setChapterIndex}
                 openBook={openBook}
                 bookData={bookData}
             />
@@ -123,7 +155,7 @@ function App() {
                     getParagraph={getParagraph}
                 />
             ))}
-        </PagePadding>
+        </AppWrapper>
     )
 }
 

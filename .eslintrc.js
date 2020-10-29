@@ -24,6 +24,7 @@ module.exports = {
     },
     plugins: ['react', '@typescript-eslint'],
     rules: {
+        '@typescript-eslint/explicit-module-boundary-types': 'off',
         '@typescript-eslint/explicit-function-return-type': 'off',
         '@typescript-eslint/member-delimiter-style': 'off',
         '@typescript-eslint/no-explicit-any': 'off',

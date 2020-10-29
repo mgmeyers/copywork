@@ -1,86 +1,76 @@
 import React from 'react'
 import styled from '@emotion/styled'
-import { BsCaretRightFill, BsCaretLeftFill } from 'react-icons/bs'
-import { RiBookOpenLine } from 'react-icons/ri'
 
 import { BookData } from '../types'
+import { Button, ManualIcon, SelectMenu } from 'evergreen-ui'
+import { Theme } from './ThemeProvider'
 
-export const Title = styled.div({
-    background: '#ffffff',
-    borderBottom: '1px solid #efefef',
-    color: '#999',
-    fontSize: 14,
+export const Title = styled.div<{ theme: Theme }>(({ theme }) => ({
+    background: theme.getForeground(100),
+    borderBottom: `1px solid ${theme.getForeground(95)}`,
+    color: theme.getForeground(95),
     left: 0,
-    padding: 15,
+    padding: 10,
     position: 'fixed',
     textAlign: 'center',
     top: 0,
     WebkitAppRegion: 'drag',
     width: '100%',
     zIndex: 1,
-})
-
-export const ArrowButton = styled.span<{ visible: boolean }>(({ visible }) => ({
-    display: 'inline-block',
-    cursor: 'pointer',
-    visibility: visible ? 'visible' : 'hidden',
-    svg: {
-        position: 'relative',
-        top: 2,
-    },
 }))
 
-export const ArrowPadding = styled.span({
-    display: 'inline-block',
-    content: "' '",
-    marginRight: '0.75em',
-})
+function getTitle(chapterTitle: string | undefined, chapterIndex: number) {
+    return chapterTitle
+        ? chapterTitle
+        : `Section ${chapterIndex + 1}`
+}
 
 export function TitleBar({
     chapterIndex,
-    decrementChapter,
-    incrementChapter,
     bookData,
     openBook,
+    setChapterIndex,
 }: {
     chapterIndex: number
-    openBook: (params: { openLast: boolean }) => void
-    decrementChapter: React.MutableRefObject<() => void>
-    incrementChapter: React.MutableRefObject<() => void>
+    openBook: (params?: { bookPath?: string }) => void
     bookData: BookData | null
+    setChapterIndex: React.Dispatch<React.SetStateAction<number | undefined>>
 }) {
     const bookTitle = bookData?.metadata.title
     const chapterTitle = bookData?.chapters[chapterIndex].title
 
     return (
         <Title>
-            <ArrowButton
-                visible={chapterIndex > 0}
+            <Button
                 onClick={() => {
-                    decrementChapter.current()
+                    openBook()
                 }}
+                appearance="minimal"
+                iconBefore={ManualIcon} height={24}
             >
-                <BsCaretLeftFill />
-            </ArrowButton>
-            <ArrowPadding />
-            <ArrowButton
-                visible
-                onClick={() => {
-                    openBook({ openLast: false })
-                }}
+                {bookTitle}
+            </Button>
+            {' '}/{' '}
+            <SelectMenu
+                closeOnSelect
+                title="Select chapter"
+                options={(bookData?.chapters || []).map((ch, i) => ({
+                    label: getTitle(ch.title, i),
+                    value: getTitle(ch.title, i),
+                }))}
+                selected={getTitle(chapterTitle, chapterIndex)}
+                onSelect={(item) =>
+                    setChapterIndex(
+                        bookData?.chapters.findIndex(
+                            (v) => v.title === item.value
+                        ) || 0
+                    )
+                }
             >
-                <RiBookOpenLine /> {bookTitle}
-            </ArrowButton>{' '}
-            / {chapterTitle ? `${chapterTitle}` : `Section ${chapterIndex + 1}`}
-            <ArrowPadding />
-            <ArrowButton
-                visible={chapterIndex < (bookData?.chapters.length || 0)}
-                onClick={() => {
-                    incrementChapter.current()
-                }}
-            >
-                <BsCaretRightFill />
-            </ArrowButton>
+                <Button appearance="minimal" height={24}>
+                    {getTitle(chapterTitle, chapterIndex)}
+                </Button>
+            </SelectMenu>
         </Title>
     )
 }

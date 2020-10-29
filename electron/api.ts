@@ -3,7 +3,6 @@ import { ipcMain, ipcRenderer } from 'electron'
 import EPub from 'epub'
 import { UserSettings } from './userSettings'
 import cheerio from 'cheerio'
-import cleanTextUtils from 'clean-text-utils'
 
 const channelPrefix = 'api.epub'
 
@@ -26,10 +25,10 @@ function getChapters(epub: EPub) {
 export function initAPIHandlers(windowState: UserSettings) {
     let epub: EPub | null = null
 
-    ipcMain.handle(`${channelPrefix}.open`, async (_, openLast?: boolean) => {
+    ipcMain.handle(`${channelPrefix}.open`, async (_, bookPath?: string) => {
         let result: Electron.OpenDialogReturnValue | null = null
 
-        if (!openLast) {
+        if (!bookPath) {
             result = await dialog.showOpenDialog({
                 properties: ['openFile'],
                 filters: [
@@ -41,8 +40,8 @@ export function initAPIHandlers(windowState: UserSettings) {
             })
         }
 
-        const filePath = openLast
-            ? windowState.currentFile
+        const filePath = bookPath
+            ? bookPath
             : result?.canceled === false
             ? result.filePaths[0]
             : null
@@ -73,8 +72,7 @@ export function initAPIHandlers(windowState: UserSettings) {
                 }
 
                 const $ = cheerio.load(str.replace(/<br[^>]*>/g, '\n\n'))
-                const paragraphs = cleanTextUtils.replace
-                    .smartChars($('body').text())
+                const paragraphs = $('body').text()
                     .split(/[\n\r]+/g).map(p => p.trim() + ' ')
                     .filter(p => {
                         return !!p.trim()
@@ -89,8 +87,8 @@ export function initAPIHandlers(windowState: UserSettings) {
 }
 
 export const apiInvokers = {
-    open: (opts?: { openLast?: boolean }) =>
-        ipcRenderer.invoke(`${channelPrefix}.open`, opts?.openLast),
+    open: (opts?: { bookPath?: string }) =>
+        ipcRenderer.invoke(`${channelPrefix}.open`, opts?.bookPath),
     getChapter: (id: string) =>
         ipcRenderer.invoke(`${channelPrefix}.getChapter`, id),
 }

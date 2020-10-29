@@ -15,5 +15,6 @@
         "skipLibCheck": true,
         "strict": true,
         "target": "es5",
+        "noFallthroughCasesInSwitch": true
     }
 }

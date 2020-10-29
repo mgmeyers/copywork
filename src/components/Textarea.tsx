@@ -1,4 +1,5 @@
 import styled, { CSSObject } from '@emotion/styled'
+import { Theme } from './ThemeProvider'
 
 const paragraphCSS: CSSObject = {
     background: 'transparent',
@@ -8,9 +9,9 @@ const paragraphCSS: CSSObject = {
     fontFamily: "'Source Serif Pro', serif",
     fontSize: 'inherit',
     fontVariantLigatures: 'no-common-ligatures',
-    fontWeight: 600,
     height: '100%',
-    lineHeight: 1.6,
+    fontWeight: 'inherit',
+    lineHeight: 'inherit',
     margin: 0,
     outline: 'none',
     overflowWrap: 'break-word',
@@ -21,33 +22,40 @@ const paragraphCSS: CSSObject = {
 }
 
 export const Textarea = styled.textarea({
+    ...paragraphCSS,
     opacity: 0.001,
-    ...paragraphCSS,
 })
 
-export const CaretWrapper = styled.div({
-    color: '#000',
-
-    '> .caret': {
-        color: '#f5cb5c',
-    },
-    '> .caret.focused': {
-        color: '#555',
-        background: '#f5cb5c',
-    },
-    '> .post': {
-        color: '#aaa',
-    },
-    '> .complete': {
-        color: '#ccc',
-    },
-    '> .next': {
-        color: '#ddd',
-    },
-    '> .pre > .error': {
-        color: '#f00',
-    },
-
+export const CaretWrapper = styled.div<{ theme: Theme }>(({ theme }) => ({
     ...paragraphCSS,
-})
+    color: theme.getForeground(60),
+}))
 
+export const CaretChar = styled.span<{ theme: Theme; focused: boolean }>(
+    ({ theme, focused }) => ({
+        color: focused ? theme.getForeground(30) : theme.getAccent(0),
+        background: focused ? theme.getAccent(0) : 'transparent',
+    })
+)
+
+export const Complete = styled.span<{ theme: Theme }>(({ theme }) => ({
+    color: theme.getForeground(0),
+}))
+
+export const Incomplete = styled.span<{ theme: Theme }>(({ theme }) => ({
+    color: theme.getForeground(66),
+}))
+
+export const CompletedParagraph = styled.span<{ theme: Theme }>(
+    ({ theme }) => ({
+        color: theme.getForeground(80),
+    })
+)
+
+export const UpcomingParagraph = styled.span<{ theme: Theme }>(({ theme }) => ({
+    color: theme.getForeground(80),
+}))
+
+export const ErrorChar = styled.span<{ theme: Theme }>(({ theme }) => ({
+    color: theme.color.error,
+}))

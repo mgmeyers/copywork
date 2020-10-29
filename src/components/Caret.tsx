@@ -1,6 +1,15 @@
 import React from 'react'
+import cleanTextUtils from 'clean-text-utils'
 
-import { CaretWrapper } from './Textarea'
+import {
+    CaretWrapper,
+    CaretChar,
+    CompletedParagraph,
+    UpcomingParagraph,
+    ErrorChar,
+    Incomplete,
+    Complete,
+} from './Textarea'
 
 interface DiffResult {
     error: boolean
@@ -23,7 +32,11 @@ export function Caret({
     if (!active) {
         return (
             <CaretWrapper>
-                <span className={complete ? 'complete' : 'next'}>{string}</span>
+                {complete ? (
+                    <CompletedParagraph>{string}</CompletedParagraph>
+                ) : (
+                    <UpcomingParagraph>{string}</UpcomingParagraph>
+                )}
             </CaretWrapper>
         )
     }
@@ -33,9 +46,17 @@ export function Caret({
     for (let i = 0, len = input.length; i < len; i++) {
         const prev = result.length - 1
         const isPrevErr = prev >= 0 ? result[prev].error : false
-        const inputChar = input[i]
 
-        if (string[i] !== inputChar) {
+        const inputChar =
+            input[i] !== ' '
+                ? cleanTextUtils.replace.smartChars(input[i])
+                : input[i]
+        const refChar =
+            string[i] !== ' '
+                ? cleanTextUtils.replace.smartChars(string[i])
+                : string[i]
+
+        if (refChar !== inputChar) {
             const errChar =
                 inputChar === ' ' ? '_' : inputChar === '\n' ? '↩' : inputChar
             if (isPrevErr) {
@@ -50,10 +71,10 @@ export function Caret({
             if (isPrevErr || prev < 0) {
                 result.push({
                     error: false,
-                    val: inputChar,
+                    val: string[i],
                 })
             } else {
-                result[prev].val += inputChar
+                result[prev].val += string[i]
             }
         }
     }
@@ -62,23 +83,19 @@ export function Caret({
 
     return (
         <CaretWrapper>
-            <span className="pre">
+            <Complete>
                 {result.map((r, i) => {
                     if (r.error) {
-                        return (
-                            <span key={i} className="error">
-                                {r.val}
-                            </span>
-                        )
+                        return <ErrorChar key={i}>{r.val}</ErrorChar>
                     }
 
                     return <React.Fragment key={i}>{r.val}</React.Fragment>
                 })}
-            </span>
-            <span className={`caret${focused ? ' focused' : ''}`}>
+            </Complete>
+            <CaretChar focused={focused}>
                 {char === '\n' ? ' \n' : char}
-            </span>
-            <span className="post">{string.substring(input.length + 1)}</span>
+            </CaretChar>
+            <Incomplete>{string.substring(input.length + 1)}</Incomplete>
         </CaretWrapper>
     )
 }
