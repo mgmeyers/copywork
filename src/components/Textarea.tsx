@@ -32,18 +32,22 @@ export const CaretWrapper = styled.div<{ theme: Theme }>(({ theme }) => ({
 }))
 
 export const CaretChar = styled.span<{ theme: Theme; focused: boolean }>(
-    ({ theme, focused }) => ({
-        color: focused ? theme.getForeground(30) : theme.getAccent(0),
-        background: focused ? theme.getAccent(0) : 'transparent',
+    ({ theme }) => ({
+        color: theme.getForeground(20),
+        background: theme.getAccent(0),
+        position: 'relative',
+        zIndex: 0,
     })
 )
 
 export const Complete = styled.span<{ theme: Theme }>(({ theme }) => ({
     color: theme.getForeground(0),
+    position: 'relative',
+    zIndex: 1,
 }))
 
 export const Incomplete = styled.span<{ theme: Theme }>(({ theme }) => ({
-    color: theme.getForeground(66),
+    color: theme.getForeground(60),
 }))
 
 export const CompletedParagraph = styled.span<{ theme: Theme }>(

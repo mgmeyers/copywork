@@ -8,7 +8,7 @@ import { Theme } from './ThemeProvider'
 export const Title = styled.div<{ theme: Theme }>(({ theme }) => ({
     background: theme.getForeground(100),
     borderBottom: `1px solid ${theme.getForeground(95)}`,
-    color: theme.getForeground(95),
+    color: theme.getForeground(85),
     left: 0,
     padding: 10,
     position: 'fixed',
@@ -19,10 +19,12 @@ export const Title = styled.div<{ theme: Theme }>(({ theme }) => ({
     zIndex: 1,
 }))
 
+const StyledButton = styled(Button)<{ theme: Theme }>(({ theme }) => ({
+    color: theme.getForeground(40) + ' !important',
+}))
+
 function getTitle(chapterTitle: string | undefined, chapterIndex: number) {
-    return chapterTitle
-        ? chapterTitle
-        : `Section ${chapterIndex + 1}`
+    return chapterTitle ? chapterTitle : `Section ${chapterIndex + 1}`
 }
 
 export function TitleBar({
@@ -41,16 +43,17 @@ export function TitleBar({
 
     return (
         <Title>
-            <Button
+            <StyledButton
                 onClick={() => {
                     openBook()
                 }}
                 appearance="minimal"
-                iconBefore={ManualIcon} height={24}
+                iconBefore={ManualIcon}
+                height={24}
             >
                 {bookTitle}
-            </Button>
-            {' '}/{' '}
+            </StyledButton>{' '}
+            /{' '}
             <SelectMenu
                 closeOnSelect
                 title="Select chapter"
@@ -67,9 +70,9 @@ export function TitleBar({
                     )
                 }
             >
-                <Button appearance="minimal" height={24}>
+                <StyledButton appearance="minimal" height={24}>
                     {getTitle(chapterTitle, chapterIndex)}
-                </Button>
+                </StyledButton>
             </SelectMenu>
         </Title>
     )
