@@ -6,7 +6,7 @@ const paragraphCSS: CSSObject = {
     border: 'none',
     borderRadius: 0,
     display: 'block',
-    fontFamily: "'Source Serif Pro', serif",
+    fontFamily: 'inherit',
     fontSize: 'inherit',
     fontVariantLigatures: 'no-common-ligatures',
     height: '100%',

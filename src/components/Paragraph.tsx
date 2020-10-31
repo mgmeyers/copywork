@@ -19,6 +19,7 @@ export const ParagraphWrapper = styled.div<{ theme: Theme }>(({ theme }) => ({
     display: 'grid',
     gridTemplate: '0fr / 1fr',
     placeItems: 'center',
+    fontFamily: theme.font.editor.family,
     fontSize: theme.font.editor.size,
     fontWeight: theme.font.editor.weight,
     lineHeight: theme.font.editor.lineHeight,

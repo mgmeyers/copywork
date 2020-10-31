@@ -15,8 +15,8 @@ interface ColorScales {
 const common = {
     font: {
         editor: {
-            family: "'Source Serif Pro', serif",
-            weight: 600,
+            family: "'IBM Plex Serif', serif",
+            weight: 500,
             size: 22,
             lineHeight: 1.6,
         },
