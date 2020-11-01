@@ -6,16 +6,17 @@ import { BrowserWindow, app, shell } from 'electron'
 import { windowStateKeeper } from './userSettings'
 import { initAPIHandlers } from './api'
 
-const debug = d('hyperlinked:main')
+import * as isDev from 'electron-is-dev'
 
-// import * as isDev from 'electron-is-dev'
-
+const debug = d('copywork:main')
 const reloadGlob = path.join(__dirname, '../../{build,src}/**/*.{js,ts,tsx}')
 
-require('electron-reload')(reloadGlob, {
-    electron: path.join(__dirname, '../../node_modules/.bin/electron'),
-    forceHardReset: true,
-})
+if (isDev) {
+    require('electron-reload')(reloadGlob, {
+        electron: path.join(__dirname, '../../node_modules/.bin/electron'),
+        forceHardReset: true,
+    })
+}
 
 let mainWindow: BrowserWindow | null = null
 
@@ -42,12 +43,11 @@ function createMainWindow() {
 
     windowState.track(mainWindow)
 
-    // if (isDev) {
-    mainWindow.loadURL('http://localhost:3000/index.html')
-    // } else {
-    // 'build/index.html'
-    // win.loadURL(`file://${__dirname}/../index.html`)
-    // }
+    if (isDev) {
+        mainWindow.loadURL('http://localhost:3000/index.html')
+    } else {
+        mainWindow.loadURL(`file://${__dirname}/build/index.html`)
+    }
 
     mainWindow.on('closed', () => {
         mainWindow = null
@@ -57,13 +57,6 @@ function createMainWindow() {
         e.preventDefault()
         shell.openExternal(url)
     })
-
-    // Hot Reloading
-    // if (isDev) {
-    // 'node_modules/.bin/electronPath'
-
-    // win.webContents.openDevTools()
-    // }
 
     return windowState
 }
