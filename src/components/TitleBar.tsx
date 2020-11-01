@@ -40,21 +40,22 @@ export const Title = styled.div<{ theme: Theme }>(({ theme }) => ({
 }))
 
 const StyledButton = styled(Button)<{ theme: Theme }>(({ theme }) => ({
-    color: theme.getForeground(40) + ' !important',
+    color: theme.getForeground(35) + ' !important',
 }))
 
 const StyledBorderButton = styled(Button)<{ theme: Theme }>(({ theme }) => ({
-    color: theme.getForeground(40) + ' !important',
+    color: theme.getForeground(35) + ' !important',
     border: `1px solid ${theme.getForeground(90)}`,
 }))
 
 const StyledIconButton = styled(IconButton)<{ theme: Theme }>(({ theme }) => ({
-    color: theme.getForeground(40) + ' !important',
+    color: theme.getForeground(35) + ' !important',
 }))
 
 const SliderWrapper = styled.div<{ theme: Theme }>(({ theme }) => ({
     '.horizontal-slider': {
         height: 14,
+        marginBottom: 8,
 
         '.thumb': {
             width: 14,
@@ -119,12 +120,11 @@ function ThemeSettings() {
             content={
                 <Pane
                     width={200}
-                    height={180}
-                    padding={8}
+                    height={232}
+                    padding={12}
                     flexDirection="column"
                 >
-                    <Pane>
-                    <Pane display="flex" paddingBottom={8}>
+                    <Pane paddingBottom={4}>
                         <Text
                             fontWeight="bold"
                             display="block"
@@ -155,20 +155,31 @@ function ThemeSettings() {
                                 iconAfter={CaretDownIcon}
                                 appearance="minimal"
                                 height={24}
+                                width="100%"
+                                justifyContent="space-between"
+                                marginBottom={8}
                             >
                                 {fontFamily}
                             </StyledBorderButton>
                         </SelectMenu>
-                        </Pane>
 
-                        <Text
-                            fontWeight="bold"
-                            display="block"
-                            fontSize={12}
-                            paddingY={4}
+                        <Pane
+                            paddingTop={8}
+                            paddingBottom={2}
+                            display="flex"
+                            justifyContent="space-between"
                         >
-                            Font Weight {fontWeight}
-                        </Text>
+                            <Text
+                                fontWeight="bold"
+                                display="block"
+                                fontSize={12}
+                            >
+                                Font Weight
+                            </Text>
+                            <Text display="block" fontSize={12}>
+                                {fontWeight}
+                            </Text>
+                        </Pane>
 
                         <SliderWrapper>
                             <ReactSlider
@@ -184,14 +195,23 @@ function ThemeSettings() {
                             />
                         </SliderWrapper>
 
-                        <Text
-                            fontWeight="bold"
-                            display="block"
-                            fontSize={12}
-                            paddingY={4}
+                        <Pane
+                            paddingTop={8}
+                            paddingBottom={2}
+                            display="flex"
+                            justifyContent="space-between"
                         >
-                            Font Size {fontSize}
-                        </Text>
+                            <Text
+                                fontWeight="bold"
+                                display="block"
+                                fontSize={12}
+                            >
+                                Font Size
+                            </Text>
+                            <Text display="block" fontSize={12}>
+                                {fontSize}
+                            </Text>
+                        </Pane>
 
                         <SliderWrapper>
                             <ReactSlider
@@ -207,14 +227,23 @@ function ThemeSettings() {
                             />
                         </SliderWrapper>
 
-                        <Text
-                            fontWeight="bold"
-                            display="block"
-                            fontSize={12}
-                            paddingY={4}
+                        <Pane
+                            paddingTop={8}
+                            paddingBottom={2}
+                            display="flex"
+                            justifyContent="space-between"
                         >
-                            Line Height {lineHeight}
-                        </Text>
+                            <Text
+                                fontWeight="bold"
+                                display="block"
+                                fontSize={12}
+                            >
+                                Line Height
+                            </Text>
+                            <Text display="block" fontSize={12}>
+                                {lineHeight}
+                            </Text>
+                        </Pane>
 
                         <SliderWrapper>
                             <ReactSlider
@@ -247,7 +276,7 @@ export function TitleBar({
     chapterIndex: number
     openBook: (params?: { bookPath?: string }) => void
     bookData: BookData | null
-    setChapterIndex: React.Dispatch<React.SetStateAction<number | undefined>>
+    setChapterIndex: (index: number) => void
 }) {
     const bookTitle = bookData?.metadata.title
     const chapterTitle = bookData?.chapters[chapterIndex]?.title
@@ -256,39 +285,46 @@ export function TitleBar({
     return (
         <Title>
             <Gutter />
-            <div>
-                <StyledButton
-                    onClick={() => {
-                        openBook()
-                    }}
-                    appearance="minimal"
-                    iconBefore={ManualIcon}
-                    height={24}
-                >
-                    {bookTitle}
-                </StyledButton>{' '}
-                /{' '}
-                <SelectMenu
-                    closeOnSelect
-                    title="Select chapter"
-                    options={(bookData?.chapters || []).map((ch, i) => ({
-                        label: getTitle(ch.title, i),
-                        value: ch.id,
-                    }))}
-                    selected={chapterId}
-                    onSelect={(item) =>
-                        setChapterIndex(
-                            bookData?.chapters.findIndex(
-                                (v) => v.id === item.value
-                            ) || 0
-                        )
-                    }
-                >
-                    <StyledButton appearance="minimal" height={24}>
-                        {getTitle(chapterTitle, chapterIndex)}
+            <Pane flexGrow={1} display="flex">
+                <Pane textAlign="right" width="50%">
+                    <StyledButton
+                        onClick={() => {
+                            openBook()
+                        }}
+                        appearance="minimal"
+                        iconBefore={ManualIcon}
+                        height={24}
+                    >
+                        {bookTitle}
                     </StyledButton>
-                </SelectMenu>
-            </div>
+                </Pane>
+                <Pane textAlign="left" width="50%">
+                    <SelectMenu
+                        closeOnSelect
+                        title="Select chapter"
+                        options={(bookData?.chapters || []).map((ch, i) => ({
+                            label: getTitle(ch.title, i),
+                            value: ch.id,
+                        }))}
+                        selected={chapterId}
+                        onSelect={(item) =>
+                            setChapterIndex(
+                                bookData?.chapters.findIndex(
+                                    (v) => v.id === item.value
+                                ) || 0
+                            )
+                        }
+                    >
+                        <StyledButton
+                            iconAfter={CaretDownIcon}
+                            appearance="minimal"
+                            height={24}
+                        >
+                            {getTitle(chapterTitle, chapterIndex)}
+                        </StyledButton>
+                    </SelectMenu>
+                </Pane>
+            </Pane>
             <Gutter>
                 <ThemeSettings />
             </Gutter>

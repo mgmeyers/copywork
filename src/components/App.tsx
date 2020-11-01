@@ -31,14 +31,14 @@ function App() {
         'paragraphIndex',
         0
     )
-    const [chapterIndexRaw, setChapterIndex] = useLocalStorage(
+    const [chapterIndexRaw, setChapterIndexRaw] = useLocalStorage(
         'chapterIndex',
         0
     )
     const [bookPath, setBookPath] = useLocalStorage<string>('bookPath')
 
-    const paragraphIndex = paragraphIndexRaw || 0
-    const chapterIndex = chapterIndexRaw || 0
+    const paragraphIndex = Number(paragraphIndexRaw) || 0
+    const chapterIndex = Number(chapterIndexRaw) || 0
 
     const [paragraphs, setParagraphs] = React.useState<string[] | null>(null)
     const [bookData, setBookData] = React.useState<BookData | null>(null)
@@ -58,11 +58,15 @@ function App() {
         }
     }, [bookData, chapterIndex])
 
+    const setChapterIndex = React.useCallback((index: number) => {
+        setChapterIndexRaw(index)
+        setParagraphIndex(0)
+    }, [])
+
     const incrementChapter = useLatest(() => {
         setChapterIndex(
             Math.min(chapterIndex + 1, (bookData?.chapters?.length || 1) - 1)
         )
-        setParagraphIndex(0)
     })
 
     const paragraphCount = useLatest(paragraphs?.length || 0)
@@ -103,7 +107,6 @@ function App() {
 
                         if (bookPath !== res.filePath) {
                             setChapterIndex(0)
-                            setParagraphIndex(0)
                         }
 
                         setBookPath(res.filePath)
