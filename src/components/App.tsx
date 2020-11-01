@@ -48,7 +48,7 @@ function App() {
     ] = React.useState<boolean>(false)
 
     React.useEffect(() => {
-        if (bookData) {
+        if (bookData && bookData.chapters[chapterIndex]) {
             window.apiBridge
                 .getChapter(bookData.chapters[chapterIndex].id)
                 .then((res: any) => {

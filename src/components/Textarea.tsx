@@ -47,7 +47,7 @@ export const Complete = styled.span<{ theme: Theme }>(({ theme }) => ({
 }))
 
 export const Incomplete = styled.span<{ theme: Theme }>(({ theme }) => ({
-    color: theme.getForeground(60),
+    color: theme.getForeground(55),
 }))
 
 export const CompletedParagraph = styled.span<{ theme: Theme }>(

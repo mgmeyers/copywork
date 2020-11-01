@@ -2209,6 +2209,21 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-motion@*":
+  version "0.0.29"
+  resolved "https://registry.yarnpkg.com/@types/react-motion/-/react-motion-0.0.29.tgz#1a22e11bc1452150e8aa58463f72dd921ff10721"
+  integrity sha512-MD1DbdcDKruR0zz5Z0XIlrkPdjDMgYx0AHhbaoTBpDirUTt8Bd7x6OFE458nEINZxfPW0EcEOw2O8S/WwGNLsA==
+  dependencies:
+    "@types/react" "*"
+
+"@types/react-slider@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@types/react-slider/-/react-slider-1.0.0.tgz#bdb29573d6cee2b269ff2814b3cadd08f5dc48d5"
+  integrity sha512-OQpKbS1J96UwUGOqMiVedFM5ds73HQmYufL3yEoLQ51NCUof2A2NQqpeu5U1EwZQI3MhERU78uXhKJzY7Lbqbw==
+  dependencies:
+    "@types/react" "*"
+    "@types/react-motion" "*"
+
 "@types/react-transition-group@^4.4.0":
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/@types/react-transition-group/-/react-transition-group-4.4.0.tgz#882839db465df1320e4753e6e9f70ca7e9b4d46d"
@@ -11058,6 +11073,11 @@ react-scrollbar-size@^2.0.2:
     prop-types "^15.6.0"
     react-event-listener "^0.5.1"
     stifle "^1.0.2"
+
+react-slider@^1.0.11:
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/react-slider/-/react-slider-1.0.11.tgz#d782e3dbfee22fd314ad0fb970da74f74c7e214f"
+  integrity sha512-NQSae3kCM+on7nXrDN33afQH95HHMVYF/NwibEKsXjIVuQIs9EON8YWGYwNVy1xOPXG3ZcHWusPyA/5AqpvOoA==
 
 react-tiny-virtual-list@^2.1.4:
   version "2.2.0"
