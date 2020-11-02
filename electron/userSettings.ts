@@ -1,12 +1,6 @@
 import { BrowserWindow, Rectangle, screen } from 'electron'
 import appSettings from 'electron-settings'
 
-import { getDataPath } from './helpers'
-
-appSettings.configure({
-    dir: getDataPath(),
-})
-
 export interface WindowState extends Partial<Rectangle> {
     isMaximized?: boolean
     currentFile?: string

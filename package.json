@@ -1,85 +1,97 @@
 {
-  "name": "copywork",
-  "version": "0.1.0",
-  "license": "GNU GPLv3",
-  "private": true,
-  "main": "build/electron/main.js",
-  "scripts": {
-    "eject": "react-scripts eject",
-    "lint": "eslint ./src",
-    "test": "react-scripts test",
-    "postinstall": "electron-builder install-app-deps",
-    "build:electron": "yarn build:react && tsc -p electron && electron-builder",
-    "build:react": "react-scripts build",
-    "build:storybook": "build-storybook -s public",
-    "electron:main": "tsc -p electron -w",
-    "electron:react": "BROWSER=none react-scripts start",
-    "start:electron": "DEBUG=copywork:* electron .",
-    "start:storybook": "start-storybook -p 9009 -s public",
-    "start:ui": "nf start -p 3000"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version"
-    ]
-  },
-  "build": {
-    "extends": null,
-    "files": [
-      "build/**/*"
-    ],
-    "directories": {
-      "buildResources": "assets"
+    "name": "copywork",
+    "version": "0.1.0",
+    "license": "GNU GPLv3",
+    "private": true,
+    "description": "Temporary description",
+    "author": "Matthew Meyers <hello@matthewmeye.rs>",
+    "homepage": "./",
+    "main": "build/electron/main.js",
+    "scripts": {
+        "eject": "react-scripts eject",
+        "lint": "eslint ./src",
+        "test": "react-scripts test",
+        "postinstall": "electron-builder install-app-deps",
+        "build:electron": "yarn build:react && tsc -p electron && electron-builder",
+        "build:react": "react-scripts build",
+        "build:storybook": "build-storybook -s public",
+        "electron:main": "tsc -p electron -w",
+        "electron:react": "BROWSER=none react-scripts start",
+        "start:electron": "DEBUG=copywork:* electron .",
+        "start:storybook": "start-storybook -p 9009 -s public",
+        "start:ui": "nf start -p 3000",
+        "build:icon": "electron-icon-maker --input=src/icon.png --output=assets"
+    },
+    "eslintConfig": {
+        "extends": "react-app"
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version"
+        ]
+    },
+    "build": {
+        "appId": "rs.matthewmeye.copywork",
+        "productName": "Copy Work",
+        "extends": null,
+        "files": [
+            "build/**/*"
+        ],
+        "directories": {
+            "buildResources": "assets"
+        },
+        "mac": {
+            "category": "public.app-category.education",
+            "target": "dmg",
+            "darkModeSupport": true,
+            "type": "development"
+        }
+    },
+    "dependencies": {
+        "@csstools/normalize.css": "^11.0.1",
+        "@emotion/core": "^10.0.35",
+        "@emotion/styled": "^10.0.27",
+        "@testing-library/jest-dom": "^4.2.4",
+        "@testing-library/react": "^9.3.2",
+        "@testing-library/user-event": "^7.1.2",
+        "caret-pos": "^2.0.0",
+        "cheerio": "^1.0.0-rc.3",
+        "chroma-js": "^2.1.0",
+        "clean-text-utils": "^1.1.17",
+        "electron-is-dev": "^1.2.0",
+        "electron-settings": "^4.0.2",
+        "emotion-theming": "^10.0.27",
+        "epub": "^1.2.1",
+        "evergreen-ui": "^5.1.2",
+        "react": "^17.0.1",
+        "react-dom": "^17.0.1",
+        "react-scripts": "4.0.0",
+        "react-slider": "^1.0.11",
+        "react-use": "^15.3.4",
+        "react-use-system-theme": "^1.1.1",
+        "scroll": "^3.0.1",
+        "typescript": "4.0.5"
+    },
+    "devDependencies": {
+        "@types/cheerio": "^0.22.22",
+        "@types/chroma-js": "^2.1.0",
+        "@types/jest": "^24.0.0",
+        "@types/node": "^12.0.0",
+        "@types/react": "^16.9.0",
+        "@types/react-dom": "^16.9.0",
+        "@types/react-modal": "^3.10.6",
+        "@types/react-slider": "^1.0.0",
+        "concurrently": "^5.3.0",
+        "electron": "^10.1.5",
+        "electron-builder": "^22.9.1",
+        "electron-icon-maker": "^0.0.5",
+        "electron-reload": "^1.5.0",
+        "foreman": "^3.0.1",
+        "wait-on": "^5.2.0"
     }
-  },
-  "dependencies": {
-    "@csstools/normalize.css": "^11.0.1",
-    "@emotion/core": "^10.0.35",
-    "@emotion/styled": "^10.0.27",
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
-    "caret-pos": "^2.0.0",
-    "cheerio": "^1.0.0-rc.3",
-    "chroma-js": "^2.1.0",
-    "clean-text-utils": "^1.1.17",
-    "electron-is-dev": "^1.2.0",
-    "electron-settings": "^4.0.2",
-    "emotion-theming": "^10.0.27",
-    "epub": "^1.2.1",
-    "evergreen-ui": "^5.1.2",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "react-icons": "^3.11.0",
-    "react-scripts": "4.0.0",
-    "react-slider": "^1.0.11",
-    "react-use": "^15.3.4",
-    "react-use-system-theme": "^1.1.1",
-    "scroll": "^3.0.1",
-    "typescript": "4.0.5"
-  },
-  "devDependencies": {
-    "electron-reload": "^1.5.0",
-    "concurrently": "^5.3.0",
-    "electron": "^10.1.5",
-    "electron-builder": "^22.9.1",
-    "foreman": "^3.0.1",
-    "wait-on": "^5.2.0",
-    "@types/cheerio": "^0.22.22",
-    "@types/chroma-js": "^2.1.0",
-    "@types/jest": "^24.0.0",
-    "@types/node": "^12.0.0",
-    "@types/react": "^16.9.0",
-    "@types/react-dom": "^16.9.0",
-    "@types/react-modal": "^3.10.6",
-    "@types/react-slider": "^1.0.0"
-  }
 }

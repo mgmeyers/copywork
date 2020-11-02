@@ -6,12 +6,13 @@ import { BrowserWindow, app, shell } from 'electron'
 import { windowStateKeeper } from './userSettings'
 import { initAPIHandlers } from './api'
 
-import * as isDev from 'electron-is-dev'
+import isDev from 'electron-is-dev'
 
 const debug = d('copywork:main')
-const reloadGlob = path.join(__dirname, '../../{build,src}/**/*.{js,ts,tsx}')
 
 if (isDev) {
+    const reloadGlob = path.join(__dirname, '../../{build,src}/**/*.{js,ts,tsx}')
+
     require('electron-reload')(reloadGlob, {
         electron: path.join(__dirname, '../../node_modules/.bin/electron'),
         forceHardReset: true,
@@ -46,7 +47,7 @@ function createMainWindow() {
     if (isDev) {
         mainWindow.loadURL('http://localhost:3000/index.html')
     } else {
-        mainWindow.loadURL(`file://${__dirname}/build/index.html`)
+        mainWindow.loadURL(`file://${path.join(__dirname, '../index.html')}`)
     }
 
     mainWindow.on('closed', () => {
