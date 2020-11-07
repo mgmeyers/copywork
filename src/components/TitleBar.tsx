@@ -19,6 +19,7 @@ import {
     useFontSizeState,
     useFontWeightState,
     useLineHeightState,
+    useLineWidthState,
 } from './ThemeProvider'
 import { useLocalStorage } from 'react-use'
 import { useTheme } from 'emotion-theming'
@@ -34,7 +35,7 @@ export const Title = styled.div<{ theme: Theme }>(({ theme }) => ({
     top: 0,
     WebkitAppRegion: 'drag',
     width: '100%',
-    zIndex: 1,
+    zIndex: 3,
     display: 'flex',
     justifyContent: 'space-between',
 }))
@@ -107,10 +108,16 @@ function ThemeSettings() {
         'lineHeight',
         theme.font.editor.lineHeight
     )
+    const [lineWidth, setLineWidth] = useLocalStorage(
+        'lineWidth',
+        theme.font.editor.lineWidth
+    )
+
     const [, setFontFamilyState] = useFontFamilyState()
     const [, setFontWeightState] = useFontWeightState()
     const [, setFontSizeState] = useFontSizeState()
     const [, setLineHeightState] = useLineHeightState()
+    const [, setLineWidthState] = useLineWidthState()
 
     const fonts = ['Kreon', 'Lora', 'Roboto Slab', 'Rosario', 'Rubik']
 
@@ -120,7 +127,6 @@ function ThemeSettings() {
             content={
                 <Pane
                     width={200}
-                    height={232}
                     padding={12}
                     flexDirection="column"
                 >
@@ -255,6 +261,38 @@ function ThemeSettings() {
                                 onChange={(v) => {
                                     setLineHeight(v as number)
                                     setLineHeightState(v as number)
+                                }}
+                            />
+                        </SliderWrapper>
+
+                        <Pane
+                            paddingTop={8}
+                            paddingBottom={2}
+                            display="flex"
+                            justifyContent="space-between"
+                        >
+                            <Text
+                                fontWeight="bold"
+                                display="block"
+                                fontSize={12}
+                            >
+                                Line Width
+                            </Text>
+                            <Text display="block" fontSize={12}>
+                                {lineWidth}
+                            </Text>
+                        </Pane>
+
+                        <SliderWrapper>
+                            <ReactSlider
+                                className="horizontal-slider"
+                                defaultValue={lineWidth as number}
+                                min={30}
+                                max={100}
+                                step={1}
+                                onChange={(v) => {
+                                    setLineWidth(v as number)
+                                    setLineWidthState(v as number)
                                 }}
                             />
                         </SliderWrapper>

@@ -15,7 +15,7 @@ import { Theme } from './ThemeProvider'
 export const ParagraphWrapper = styled.div<{ theme: Theme }>(({ theme }) => ({
     position: 'relative',
     width: '80%',
-    maxWidth: '50ch',
+    maxWidth: `${theme.font.editor.lineWidth}ch`,
     display: 'grid',
     gridTemplate: '0fr / 1fr',
     placeItems: 'center',

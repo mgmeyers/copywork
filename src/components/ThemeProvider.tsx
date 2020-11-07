@@ -16,10 +16,11 @@ interface ColorScales {
 const common = {
     font: {
         editor: {
-            family: "'IBM Plex Serif', serif",
+            family: "'Roboto Slab', serif",
             weight: 500,
             size: 22,
             lineHeight: 1.6,
+            lineWidth: 50,
         },
         ui: {
             family: '-apple-system, BlinkMacSystemFont, sans-serif',
@@ -139,6 +140,9 @@ export const useFontSizeState = createGlobalState<number>(
 export const useLineHeightState = createGlobalState<number>(
     Number(window.localStorage.lineHeight) || common.font.editor.lineHeight
 )
+export const useLineWidthState = createGlobalState<number>(
+    Number(window.localStorage.lineWidth) || common.font.editor.lineWidth
+)
 
 export function ThemeProvider(props: React.PropsWithChildren<any>) {
     const systemTheme = useSystemTheme('light') as 'light' | 'dark'
@@ -146,6 +150,7 @@ export function ThemeProvider(props: React.PropsWithChildren<any>) {
     const [fontWeightState] = useFontWeightState()
     const [fontSizeState] = useFontSizeState()
     const [lineHeightState] = useLineHeightState()
+    const [lineWidthState] = useLineWidthState()
 
     const colorScales = React.useMemo(() => {
         const foregroundScale = chroma.scale([
@@ -175,6 +180,7 @@ export function ThemeProvider(props: React.PropsWithChildren<any>) {
                 weight: fontWeightState as number,
                 size: fontSizeState as number,
                 lineHeight: lineHeightState as number,
+                lineWidth: lineWidthState as number,
             },
         },
     }
